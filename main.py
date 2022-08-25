@@ -25,7 +25,7 @@ for track in playlist.items:
         artist_ids.append(artist.id)
     #     print(artist.id)
     # print("\n")
-print(artist_ids)
+# print(artist_ids)
 
 # get list of all genres
 genre_list = []
@@ -35,11 +35,13 @@ for artist_id in artist_ids:
     for genre in current_artist.genres:
         genre_list.append(genre)
 genre_list.sort()
-print(genre_list)
+# print(genre_list)
 
 # count occurences of each genre
 genre_counts = []
 for genre in genre_list:
     count = genre_list.count(genre)
-    genre_counts.append([genre, count])
+    if [genre, count] not in genre_counts:
+        genre_counts.append([genre, count])
+genre_counts.sort(key=lambda k: k[1], reverse=True)  # sorts list by second item
 print(genre_counts)
