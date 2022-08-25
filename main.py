@@ -17,8 +17,12 @@ app_token = tk.request_client_token(client_id, client_secret)
 # create spotify api object
 spotify = tk.Spotify(app_token)
 
+# get list of artists
+artist_list = []
 playlist = spotify.playlist_items("2V9ylS1wvL5xVwmmAMPKbM")
 for track in playlist.items:
     for artist in track.track.artists:
-        print(artist.name)
-    print("\n")
+        artist_list.append(artist.id)
+    #     print(artist.id)
+    # print("\n")
+print(artist_list)
