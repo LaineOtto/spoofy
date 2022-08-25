@@ -18,11 +18,28 @@ app_token = tk.request_client_token(client_id, client_secret)
 spotify = tk.Spotify(app_token)
 
 # get list of artists
-artist_list = []
+artist_ids = []
 playlist = spotify.playlist_items("2V9ylS1wvL5xVwmmAMPKbM")
 for track in playlist.items:
     for artist in track.track.artists:
-        artist_list.append(artist.id)
+        artist_ids.append(artist.id)
     #     print(artist.id)
     # print("\n")
-print(artist_list)
+print(artist_ids)
+
+# get list of all genres
+genre_list = []
+for artist_id in artist_ids:
+    current_artist = spotify.artist(artist_id)
+    # print(current_artist.genres)
+    for genre in current_artist.genres:
+        genre_list.append(genre)
+genre_list.sort()
+print(genre_list)
+
+# count occurences of each genre
+genre_counts = []
+for genre in genre_list:
+    count = genre_list.count(genre)
+    genre_counts.append([genre, count])
+print(genre_counts)
