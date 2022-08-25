@@ -19,4 +19,5 @@ spotify = tk.Spotify(app_token)
 
 playlist = spotify.playlist('2V9ylS1wvL5xVwmmAMPKbM')
 for track in playlist.tracks.items:
-        print(track.track.name)
+        for artist in track.track.artists:
+            print(artist.name)
