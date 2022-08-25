@@ -13,4 +13,10 @@ client_secret = os.environ.get('client_secret')
 
 # request app token for spotify api access
 app_token = tk.request_client_token(client_id, client_secret)
-print(app_token)
+
+# create spotify api object
+spotify = tk.Spotify(app_token)
+
+playlist = spotify.playlist('2V9ylS1wvL5xVwmmAMPKbM')
+for track in playlist.tracks.items:
+        print(track.track.name)
