@@ -1,6 +1,16 @@
-from dotenv import load_dotenv
 import os
 
+# library for reading enviroment variables from .env file
+from dotenv import load_dotenv
+
+# spotify api library
+import tekore as tk
+
+# load enviroment variables
 load_dotenv()
-print(os.environ.get('client_id'))
-print(os.environ.get('client_secret'))
+client_id = os.environ.get('client_id')
+client_secret = os.environ.get('client_secret')
+
+# request app token for spotify api access
+app_token = tk.request_client_token(client_id, client_secret)
+print(app_token)
