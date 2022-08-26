@@ -44,4 +44,7 @@ for genre in genre_list:
     if [genre, count] not in genre_counts:
         genre_counts.append([genre, count])
 genre_counts.sort(key=lambda k: k[1], reverse=True)  # sorts list by second item
-print(genre_counts)
+# print(genre_counts)
+for genre in genre_counts:
+    print(genre)
+    print()
