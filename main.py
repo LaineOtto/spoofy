@@ -6,45 +6,60 @@ from dotenv import load_dotenv
 # spotify api library
 import tekore as tk
 
-# load enviroment variables
-load_dotenv()
-client_id = os.environ.get("client_id")
-client_secret = os.environ.get("client_secret")
+def loadEnvironment():
+    load_dotenv()
+    clientId = os.environ.get("clientId")
+    clientSecret = os.environ.get("clientSecret")
+    return clientId, clientSecret
 
-# request app token for spotify api access
-app_token = tk.request_client_token(client_id, client_secret)
+def getAPI(clientId, clientSecret):
+    app_token = tk.request_client_token(clientId, clientSecret)
+    spotifyAPI = tk.Spotify(app_token)
+    return spotifyAPI
 
-# create spotify api object
-spotify = tk.Spotify(app_token)
+def getArtists(spotifyAPI):
+    # get list of artists
+    artistIds = []
+    playlist = spotifyAPI.playlist_items("2V9ylS1wvL5xVwmmAMPKbM")
+    for track in playlist.items:
+        for artist in track.track.artists:
+            artistIds.append(artist.id)
+    return artistIds
 
-# get list of artists
-artist_ids = []
-playlist = spotify.playlist_items("2V9ylS1wvL5xVwmmAMPKbM")
-for track in playlist.items:
-    for artist in track.track.artists:
-        artist_ids.append(artist.id)
-    #     print(artist.id)
-    # print("\n")
-# print(artist_ids)
+def listGenres(spotifyAPI, artistIds):
+    # get list of all genres
+    genreList = []
+    for artist_id in artistIds:
+        currentArtist = spotifyAPI.artist(artist_id)
+        for genre in currentArtist.genres:
+            genreList.append(genre)
+    genreList.sort()
+    return genreList
 
-# get list of all genres
-genre_list = []
-for artist_id in artist_ids:
-    current_artist = spotify.artist(artist_id)
-    # print(current_artist.genres)
-    for genre in current_artist.genres:
-        genre_list.append(genre)
-genre_list.sort()
-# print(genre_list)
+def countGenres(genreList):
+    # count occurences of each genre
+    genreCounts = []
+    for genre in genreList:
+        count = genreList.count(genre)
+        if [genre, count] not in genreCounts:
+            genreCounts.append([genre, count])
+    # sorts list by second item
+    genreCounts.sort(key=lambda k: k[1], reverse=True)
+    return genreCounts
 
-# count occurences of each genre
-genre_counts = []
-for genre in genre_list:
-    count = genre_list.count(genre)
-    if [genre, count] not in genre_counts:
-        genre_counts.append([genre, count])
-genre_counts.sort(key=lambda k: k[1], reverse=True)  # sorts list by second item
-# print(genre_counts)
-for genre in genre_counts:
-    print(genre)
-    print()
+def displayResult(genreCounts):
+    print("placeholder")
+    for genre in genreCounts:
+        print(genre)
+        print()
+
+def main():
+    clientId, clientSecret = loadEnvironment()
+    spotifyAPI = getAPI(clientId, clientSecret)
+    artistIds = getArtists(spotifyAPI)
+    genreList = listGenres(spotifyAPI, artistIds)
+    genreCounts = countGenres(genreList)
+    displayResult(genreCounts)
+
+if __name__ == '__main__':
+    main()
